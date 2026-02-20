@@ -4,6 +4,7 @@ package com.nttdata.gestaoFinanceira.controller;
 import com.nttdata.gestaoFinanceira.conta.Conta;
 import com.nttdata.gestaoFinanceira.conta.ContaRepository;
 import com.nttdata.gestaoFinanceira.conta.DadosCadastroConta;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ public class ContaController {
     private ContaRepository repository;
 
     @PostMapping
+    @Transactional
     public void cadastrar(@RequestBody DadosCadastroConta dados){
         repository.save(new Conta(dados));
     }

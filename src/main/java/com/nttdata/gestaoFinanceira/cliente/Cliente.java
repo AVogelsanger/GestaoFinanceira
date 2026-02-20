@@ -1,11 +1,12 @@
 package com.nttdata.gestaoFinanceira.cliente;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Embeddable
 @Getter
@@ -13,13 +14,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Cliente {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private String nome;
     private String cpf;
     private String email;
     private String telefone;
-    private LocalDate dataCriacao;
+    @Column(name = "data_criacao")
+    private String dataCriacao;
 
     @Enumerated(EnumType.STRING)
     private Status status;

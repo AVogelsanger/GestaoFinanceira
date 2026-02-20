@@ -7,9 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 @Table(name = "contas")
 @Entity(name = "Conta")
 @Getter
@@ -22,15 +19,18 @@ public class Conta {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_conta")
     private TipoConta tipoConta;
-
+    @Column(name = "numero_conta")
     private String numeroConta;
     private String agencia;
+    @Column(name = "saldo_atual")
     private String saldoAtual;
+    @Column(name = "data_abertura")
     private String dataAbertura;
 
-//    @Embedded
-//    private Cliente cliente;
+    @Embedded
+    private Cliente cliente;
 
     public Conta(DadosCadastroConta dados) {
         this.tipoConta = dados.tipoConta();
@@ -38,6 +38,6 @@ public class Conta {
         this.agencia = dados.agencia();
         this.saldoAtual = dados.saldoAtual();
         this.dataAbertura = dados.dataAbertura();
-    //    this.cliente = new Cliente(dados.cliente());
+        this.cliente = new Cliente(dados.cliente());
     }
 }
