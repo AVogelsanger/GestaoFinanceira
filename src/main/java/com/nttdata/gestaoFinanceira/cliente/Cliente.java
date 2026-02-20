@@ -1,37 +1,46 @@
 package com.nttdata.gestaoFinanceira.cliente;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.nttdata.gestaoFinanceira.conta.Conta;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 
-@Embeddable
+import java.util.List;
+import java.util.UUID;
+
+@Table(name = "clientes")
+@Entity(name = "Cliente")
 @Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente {
 
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    @Column(nullable = false, length = 150)
     private String nome;
+    @Column(nullable = false, length = 11, unique = true)
     private String cpf;
     private String email;
     private String telefone;
-    @Column(name = "data_criacao")
-    private String dataCriacao;
+    @Column(name = "data_cadastro", nullable = false)
+    private String dataCadastro;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Conta> contas;
+
 
     public Cliente(DadosCadastroCliente dados) {
         this.nome = dados.nome();
         this.cpf = dados.cpf();
         this.email = dados.email();
         this.telefone = dados.telefone();
-        this.dataCriacao = dados.dataCriacao();
+        this.dataCadastro = dados.dataCadastro();
         this.status = dados.status();
     }
 }
