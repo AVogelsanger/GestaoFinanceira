@@ -4,13 +4,14 @@ import com.nttdata.gestaoFinanceira.cliente.DadosCadastroCliente;
 import com.nttdata.gestaoFinanceira.investimento.DadosCadastroInvestimento;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
 
 public record DadosCadastroConta(
         TipoConta tipoConta,
         String numeroConta,
         String agencia,
         BigDecimal saldoAtual,
-        String dataAbertura,
-        DadosCadastroCliente cliente,
-        DadosCadastroInvestimento investimento) {
+        LocalDate dataAbertura,
+        UUID clienteId) {
 }

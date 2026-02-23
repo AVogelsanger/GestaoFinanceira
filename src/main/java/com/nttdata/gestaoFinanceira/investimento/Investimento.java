@@ -12,7 +12,6 @@ import java.util.UUID;
 @Entity(name = "Investimento")
 @Table(name = "investimentos")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,11 +39,16 @@ public class Investimento {
     @JoinColumn(name = "produto_id", nullable = false)
     private ProdutoFinanceiro produto;
 
-    public Investimento(DadosCadastroInvestimento dados) {
+    public Investimento(DadosCadastroInvestimento dados, Conta conta, ProdutoFinanceiro produto) {
         this.valorAplicado = dados.valorAplicado();
-        this.dataAplicacao = getDataAplicacao();
+        this.dataAplicacao = dados.dataAplicacao();
         this.status = dados.status();
-        this.conta = dados.conta();
-        this.produto = dados.produto();
+        this.conta = conta;
+        this.produto = produto;
     }
+
+    public void associarConta(Conta conta) {
+        this.conta = conta;
+    }
+
 }

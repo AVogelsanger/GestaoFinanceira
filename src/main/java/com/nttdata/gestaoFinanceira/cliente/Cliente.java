@@ -1,10 +1,12 @@
 package com.nttdata.gestaoFinanceira.cliente;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nttdata.gestaoFinanceira.conta.Conta;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,13 +28,14 @@ public class Cliente {
     private String email;
     private String telefone;
     @Column(name = "data_cadastro", nullable = false)
-    private String dataCadastro;
+    private LocalDate dataCadastro;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Conta> contas;
+    private List<Conta> contas = new ArrayList<>();
 
 
     public Cliente(DadosCadastroCliente dados) {
@@ -43,4 +46,24 @@ public class Cliente {
         this.dataCadastro = dados.dataCadastro();
         this.status = dados.status();
     }
+
+    public void atualizarInformacoes(DadosAtualizacaoCliente dados) {
+
+        if (dados.nome() != null) {
+            this.nome = dados.nome();
+        }
+
+        if (dados.email() != null) {
+            this.email = dados.email();
+        }
+
+        if (dados.telefone() != null) {
+            this.telefone = dados.telefone();
+        }
+
+        if (dados.status() != null) {
+            this.status = dados.status();
+        }
+    }
+
 }

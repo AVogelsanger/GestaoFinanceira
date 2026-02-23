@@ -5,11 +5,12 @@ import com.nttdata.gestaoFinanceira.produtoFinanceiro.ProdutoFinanceiro;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record DadosCadastroInvestimento(
         BigDecimal valorAplicado,
         LocalDateTime dataAplicacao,
         StatusInvestimento status,
-        Conta conta,
-        ProdutoFinanceiro produto) {
+        UUID contaId,
+        UUID produtoId) {
 }

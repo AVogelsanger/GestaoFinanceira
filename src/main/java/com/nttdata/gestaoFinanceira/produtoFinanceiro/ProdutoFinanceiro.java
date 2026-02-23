@@ -4,7 +4,6 @@ package com.nttdata.gestaoFinanceira.produtoFinanceiro;
 import com.nttdata.gestaoFinanceira.investimento.Investimento;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
 import java.util.List;

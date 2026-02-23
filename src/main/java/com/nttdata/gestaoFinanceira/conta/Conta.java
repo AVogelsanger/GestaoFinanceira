@@ -1,19 +1,21 @@
 package com.nttdata.gestaoFinanceira.conta;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nttdata.gestaoFinanceira.cliente.Cliente;
 import com.nttdata.gestaoFinanceira.investimento.Investimento;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 
 @Table(name = "contas")
 @Entity(name = "Conta")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,28 +30,65 @@ public class Conta {
     private TipoConta tipoConta;
     @Column(name = "numero_conta", unique = true, nullable = false)
     private String numeroConta;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String agencia;
-    @Column(name = "saldo_atual", unique = true, nullable = false)
+    @Column(name = "saldo_atual", nullable = false)
     private BigDecimal saldoAtual;
     @Column(name = "data_abertura")
-    private String dataAbertura;
+    private LocalDate dataAbertura;
 
-//    @Embedded
-//    private Cliente cliente;
-
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)@JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
-    @OneToMany(mappedBy = "conta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Investimento> investimentos;
+    @Builder.Default
+    @OneToMany(mappedBy = "conta", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Investimento> investimentos = new ArrayList<>();
 
-    public Conta(DadosCadastroConta dados) {
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusConta status;
+
+    public Conta(DadosCadastroConta dados, Cliente cliente) {
         this.tipoConta = dados.tipoConta();
         this.numeroConta = dados.numeroConta();
         this.agencia = dados.agencia();
         this.saldoAtual = dados.saldoAtual();
         this.dataAbertura = dados.dataAbertura();
-        this.cliente = new Cliente(dados.cliente());
-        this.investimentos = Collections.singletonList(new Investimento(dados.investimento()));
+        this.cliente = cliente;
+        this.status = StatusConta.ATIVA;
     }
+
+    public void debitar(BigDecimal valor) {
+
+        if (this.status == StatusConta.INATIVA) {
+            throw new IllegalArgumentException("Conta está inativa");
+        }
+
+        if (this.saldoAtual.compareTo(valor) < 0) {
+            throw new IllegalArgumentException("Saldo insuficiente");
+        }
+
+        this.saldoAtual = this.saldoAtual.subtract(valor);
+    }
+
+    public void adicionarInvestimento(Investimento investimento) {
+        investimento.associarConta(this);
+        this.investimentos.add(investimento);
+    }
+
+    public void atualizarInformacoes(DadosAtualizacaoConta dados) {
+
+        if (dados.tipoConta() != null) {
+            this.tipoConta = dados.tipoConta();
+        }
+
+        if (dados.agencia() != null) {
+            this.agencia = dados.agencia();
+        }
+    }
+
+    public void inativar() {
+        this.status = StatusConta.INATIVA;
+    }
+
 }
