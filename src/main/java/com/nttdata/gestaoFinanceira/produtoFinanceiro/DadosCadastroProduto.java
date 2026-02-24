@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public record DadosCadastroProduto(
         String nome,
-        String tipo,
+        TipoProduto tipo,
         BigDecimal taxaRendimento,
         Integer prazoMinimoDias
 ) {

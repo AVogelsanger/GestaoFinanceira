@@ -42,7 +42,7 @@ public class Investimento {
     public Investimento(DadosCadastroInvestimento dados, Conta conta, ProdutoFinanceiro produto) {
         this.valorAplicado = dados.valorAplicado();
         this.dataAplicacao = dados.dataAplicacao();
-        this.status = dados.status();
+        this.status = StatusInvestimento.ATIVO;
         this.conta = conta;
         this.produto = produto;
     }

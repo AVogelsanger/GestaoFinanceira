@@ -10,7 +10,6 @@ import java.util.UUID;
 public record DadosCadastroInvestimento(
         BigDecimal valorAplicado,
         LocalDateTime dataAplicacao,
-        StatusInvestimento status,
         UUID contaId,
         UUID produtoId) {
 }

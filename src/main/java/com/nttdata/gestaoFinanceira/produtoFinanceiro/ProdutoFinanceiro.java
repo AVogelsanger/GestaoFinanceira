@@ -25,8 +25,9 @@ public class ProdutoFinanceiro {
     @Column(nullable = false)
     private String nome;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String tipo;
+    private TipoProduto tipo;
 
     @Column(precision = 5, scale = 2)
     private BigDecimal taxaRendimento;

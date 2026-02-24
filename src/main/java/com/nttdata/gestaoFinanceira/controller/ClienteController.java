@@ -35,10 +35,7 @@ public class ClienteController {
 //    }
 
     @GetMapping
-    public ResponseEntity<Page<DadosDetalhamentoCliente>> listar(
-            @RequestParam(required = false) Status status,
-            Pageable pageable) {
-
+    public ResponseEntity<Page<DadosDetalhamentoCliente>> listar(@RequestParam(required = false) Status status, Pageable pageable) {
         Page<Cliente> page;
 
         if (status != null) {
@@ -46,10 +43,7 @@ public class ClienteController {
         } else {
             page = service.listar(pageable);
         }
-
-        Page<DadosDetalhamentoCliente> dtoPage =
-                page.map(DadosDetalhamentoCliente::new);
-
+        Page<DadosDetalhamentoCliente> dtoPage = page.map(DadosDetalhamentoCliente::new);
         return ResponseEntity.ok(dtoPage);
     }
 
@@ -62,10 +56,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DadosDetalhamentoCliente> atualizar(
-            @PathVariable UUID id,
-            @RequestBody DadosAtualizacaoCliente dados) {
-
+    public ResponseEntity<DadosDetalhamentoCliente> atualizar(@PathVariable UUID id, @RequestBody DadosAtualizacaoCliente dados) {
         Cliente clienteAtualizado = service.atualizar(id, dados);
         return ResponseEntity.ok(new DadosDetalhamentoCliente(clienteAtualizado));
     }

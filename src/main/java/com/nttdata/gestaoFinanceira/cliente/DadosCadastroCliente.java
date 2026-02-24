@@ -7,6 +7,7 @@ public record DadosCadastroCliente(
         String cpf,
         String email,
         String telefone,
+        String cep,
         LocalDate dataCadastro,
         Status status) {
 }

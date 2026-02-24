@@ -2,6 +2,7 @@ package com.nttdata.gestaoFinanceira.controller;
 
 
 import com.nttdata.gestaoFinanceira.conta.*;
+import com.nttdata.gestaoFinanceira.infra.brasilapi.cliente.MockBankApiClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class ContaController {
 
     private final ContaService service;
+    private final MockBankApiClient mockBankApiClient;
 
     @PostMapping
     public ResponseEntity<DadosDetalhamentoConta> cadastrar(@RequestBody DadosCadastroConta dados){
@@ -61,6 +63,13 @@ public class ContaController {
     public ResponseEntity<Void> deletar(@PathVariable UUID id) {
         service.inativar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/saldo-externo")
+    public ResponseEntity<SaldoResponse> saldoExterno(@PathVariable UUID id) {
+        Conta conta = service.buscarPorId(id);
+        SaldoResponse saldo = mockBankApiClient.buscarSaldo(conta.getNumeroConta());
+        return ResponseEntity.ok(saldo);
     }
 
 }

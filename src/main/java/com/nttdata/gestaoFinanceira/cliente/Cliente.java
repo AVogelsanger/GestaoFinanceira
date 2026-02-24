@@ -37,32 +37,40 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Conta> contas = new ArrayList<>();
 
+    @Column(length = 8)
+    private String cep;
+
+    private String cidade;
+    private String estado;
+    private String logradouro;
+    private String bairro;
+
 
     public Cliente(DadosCadastroCliente dados) {
         this.nome = dados.nome();
         this.cpf = dados.cpf();
         this.email = dados.email();
         this.telefone = dados.telefone();
+        this.cep = dados.cep();
         this.dataCadastro = dados.dataCadastro();
         this.status = dados.status();
     }
 
     public void atualizarInformacoes(DadosAtualizacaoCliente dados) {
-
         if (dados.nome() != null) {
             this.nome = dados.nome();
         }
-
         if (dados.email() != null) {
             this.email = dados.email();
         }
-
         if (dados.telefone() != null) {
             this.telefone = dados.telefone();
         }
-
         if (dados.status() != null) {
             this.status = dados.status();
+        }
+        if (dados.cep() != null && !dados.cep().isBlank()) {
+            this.cep = dados.cep();
         }
     }
 
