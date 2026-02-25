@@ -7,6 +7,8 @@ import java.util.UUID;
 public record DadosDetalhamentoInvestimento(
         UUID id,
         BigDecimal valorAplicado,
+        BigDecimal valorUSD,
+        BigDecimal cotacaoUSD,
         LocalDateTime dataAplicacao,
         StatusInvestimento status,
         UUID contaId,
@@ -16,6 +18,8 @@ public record DadosDetalhamentoInvestimento(
         this(
                 investimento.getId(),
                 investimento.getValorAplicado(),
+                investimento.getValorUSD(),
+                investimento.getCotacaoUSD(),
                 investimento.getDataAplicacao(),
                 investimento.getStatus(),
                 investimento.getConta().getId(),

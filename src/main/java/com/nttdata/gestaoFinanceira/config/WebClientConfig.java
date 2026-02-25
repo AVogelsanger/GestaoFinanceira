@@ -19,7 +19,10 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create()
                 .secure(h -> {
                     try {
-                        h.sslContext(SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build());
+                        h.sslContext(
+                                SslContextBuilder.forClient()
+                                        .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                                        .build());
                     } catch (SSLException e) {
                         throw new RuntimeException(e);
                     }

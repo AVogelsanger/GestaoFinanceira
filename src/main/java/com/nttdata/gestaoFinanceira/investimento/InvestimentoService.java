@@ -5,6 +5,8 @@ import com.nttdata.gestaoFinanceira.conta.ContaRepository;
 import com.nttdata.gestaoFinanceira.conta.StatusConta;
 import com.nttdata.gestaoFinanceira.infra.RecursoNaoEncontradoException;
 import com.nttdata.gestaoFinanceira.infra.brasilapi.cep.BrasilApiClient;
+import com.nttdata.gestaoFinanceira.infra.brasilapi.taxa.CambioResponse;
+import com.nttdata.gestaoFinanceira.infra.brasilapi.taxa.CotacaoItem;
 import com.nttdata.gestaoFinanceira.produtoFinanceiro.ProdutoFinanceiro;
 import com.nttdata.gestaoFinanceira.produtoFinanceiro.ProdutoFinanceiroRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +44,32 @@ public class InvestimentoService {
                 .orElseThrow(() ->
                         new RecursoNaoEncontradoException("Produto não encontrado"));
 
-        // Debita o valor da conta
+        // Buscar cotação atual
+        CotacaoItem cotacao = brasilApiClient.buscarCambio("USD");
+
+        if (cotacao == null || cotacao.cotacaoCompra() == null) {
+            throw new IllegalArgumentException("Não foi possível obter cotação USD");
+        }
+
+        BigDecimal cotacaoUSD = cotacao .cotacaoCompra();
+
+        // Converter valor
+        BigDecimal valorUSD = dados.valorAplicado()
+                .divide(cotacaoUSD, 2, java.math.RoundingMode.HALF_UP);
+
+        // Debita conta
         conta.debitar(dados.valorAplicado());
 
-        // Cria o investimento
-        Investimento investimento = new Investimento(dados, conta, produto);
+        // Cria investimento com cotação persistida
+        Investimento investimento = new Investimento(
+                dados,
+                conta,
+                produto,
+                cotacaoUSD,
+                valorUSD
+        );
 
         return investimentoRepository.save(investimento);
     }
+
 }

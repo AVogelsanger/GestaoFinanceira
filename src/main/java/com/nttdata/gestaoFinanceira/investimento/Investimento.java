@@ -39,12 +39,24 @@ public class Investimento {
     @JoinColumn(name = "produto_id", nullable = false)
     private ProdutoFinanceiro produto;
 
-    public Investimento(DadosCadastroInvestimento dados, Conta conta, ProdutoFinanceiro produto) {
+    @Column(name = "cotacao_usd", nullable = false, precision = 10, scale = 4)
+    private BigDecimal cotacaoUSD;
+
+    @Column(name = "valor_usd", nullable = false, precision = 15, scale = 2)
+    private BigDecimal valorUSD;
+
+    public Investimento(DadosCadastroInvestimento dados,
+                        Conta conta,
+                        ProdutoFinanceiro produto,
+                        BigDecimal cotacaoUSD,
+                        BigDecimal valorUSD) {
         this.valorAplicado = dados.valorAplicado();
         this.dataAplicacao = dados.dataAplicacao();
         this.status = StatusInvestimento.ATIVO;
         this.conta = conta;
         this.produto = produto;
+        this.cotacaoUSD = cotacaoUSD;
+        this.valorUSD = valorUSD;
     }
 
     public void associarConta(Conta conta) {

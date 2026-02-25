@@ -1,0 +1,3 @@
+ALTER TABLE investimentos
+ADD COLUMN cotacao_usd DECIMAL(10,4) NOT NULL,
+ADD COLUMN valor_usd DECIMAL(15,2) NOT NULL;
