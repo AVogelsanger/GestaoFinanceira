@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Service
@@ -69,6 +70,26 @@ public class ContaService {
     @Transactional(readOnly = true)
     public Page<Conta> listarPorStatus(StatusConta status, Pageable pageable) {
         return contaRepository.findByStatus(status, pageable);
+    }
+
+    @Transactional
+    public Conta depositar(UUID id, BigDecimal valor) {
+        Conta conta = contaRepository.findById(id)
+                .orElseThrow(() ->
+                        new RecursoNaoEncontradoException("Conta não encontrada"));
+
+        conta.depositar(valor);
+        return conta;
+    }
+
+    @Transactional
+    public Conta sacar(UUID id, BigDecimal valor) {
+        Conta conta = contaRepository.findById(id)
+                .orElseThrow(() ->
+                        new RecursoNaoEncontradoException("Conta não encontrada"));
+
+        conta.debitar(valor);
+        return conta;
     }
 
 }

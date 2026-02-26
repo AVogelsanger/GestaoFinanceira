@@ -28,8 +28,7 @@ public class ContaController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosDetalhamentoConta>> listar(
-            @RequestParam(required = false) UUID clienteId,
+    public ResponseEntity<Page<DadosDetalhamentoConta>> listar(@RequestParam(required = false) UUID clienteId,
             @RequestParam(required = false) StatusConta status,
             Pageable pageable) {
 
@@ -42,10 +41,8 @@ public class ContaController {
         } else {
             page = service.listarPorStatus(StatusConta.ATIVA, pageable);
         }
-
         return ResponseEntity.ok(page.map(DadosDetalhamentoConta::new));
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalhamentoConta> buscarPorId(@PathVariable UUID id) {
@@ -70,6 +67,18 @@ public class ContaController {
         Conta conta = service.buscarPorId(id);
         SaldoResponse saldo = mockBankApiClient.buscarSaldo(conta.getNumeroConta());
         return ResponseEntity.ok(saldo);
+    }
+
+    @PatchMapping("/{id}/deposito")
+    public ResponseEntity<DadosDetalhamentoConta> depositar(@PathVariable UUID id, @RequestBody DadosMovimentacaoConta dados) {
+        Conta conta = service.depositar(id, dados.valor());
+        return ResponseEntity.ok(new DadosDetalhamentoConta(conta));
+    }
+
+    @PatchMapping("/{id}/saque")
+    public ResponseEntity<DadosDetalhamentoConta> sacar(@PathVariable UUID id, @RequestBody DadosMovimentacaoConta dados) {
+        Conta conta = service.sacar(id, dados.valor());
+        return ResponseEntity.ok(new DadosDetalhamentoConta(conta));
     }
 
 }

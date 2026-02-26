@@ -91,4 +91,17 @@ public class Conta {
         this.status = StatusConta.INATIVA;
     }
 
+    public void depositar(BigDecimal valor) {
+
+        if (this.status == StatusConta.INATIVA) {
+            throw new IllegalArgumentException("Conta está inativa");
+        }
+
+        if (valor == null || valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Valor de depósito deve ser maior que zero");
+        }
+
+        this.saldoAtual = this.saldoAtual.add(valor);
+    }
+
 }
