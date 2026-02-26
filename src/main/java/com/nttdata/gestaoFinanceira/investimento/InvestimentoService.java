@@ -5,7 +5,6 @@ import com.nttdata.gestaoFinanceira.conta.ContaRepository;
 import com.nttdata.gestaoFinanceira.conta.StatusConta;
 import com.nttdata.gestaoFinanceira.infra.RecursoNaoEncontradoException;
 import com.nttdata.gestaoFinanceira.infra.brasilapi.cep.BrasilApiClient;
-import com.nttdata.gestaoFinanceira.infra.brasilapi.taxa.CambioResponse;
 import com.nttdata.gestaoFinanceira.infra.brasilapi.taxa.CotacaoItem;
 import com.nttdata.gestaoFinanceira.produtoFinanceiro.ProdutoFinanceiro;
 import com.nttdata.gestaoFinanceira.produtoFinanceiro.ProdutoFinanceiroRepository;

@@ -32,20 +32,6 @@ public class BrasilApiClient {
         }
     }
 
-//    public CambioResponse buscarCambio(String moeda) {
-//        try {
-//            return webClient.get()
-//                    .uri("/cambio/v1/cotacao/{moeda}/{data}", moeda, LocalDate.now().toString())
-//                    .retrieve()
-//                    .bodyToMono(CambioResponse.class)
-//                    .block();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new IllegalArgumentException("Erro ao consultar câmbio: " + e.getMessage());
-//        }
-//    }
-
-
     public CotacaoItem buscarCambio(String moeda) {
         try {
             CambioResponse response = webClient.get()

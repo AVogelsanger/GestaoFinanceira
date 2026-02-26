@@ -1,6 +1,7 @@
 package com.nttdata.gestaoFinanceira.controller;
 
 import com.nttdata.gestaoFinanceira.cliente.*;
+import com.nttdata.gestaoFinanceira.exportacao.ExportacaoClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class ClienteController {
 
     private final ClienteService service;
+    private final ExportacaoClienteService exportacaoClienteService;
 
     @PostMapping
     public ResponseEntity<DadosDetalhamentoCliente> cadastrar(@RequestBody DadosCadastroCliente dados) {
@@ -65,6 +67,16 @@ public class ClienteController {
     public ResponseEntity<Void> deletar(@PathVariable UUID id) {
         service.inativar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/exportar")
+    public ResponseEntity<byte[]> exportarClientes() {
+        byte[] arquivo = exportacaoClienteService.exportarClientes();
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=clientes.xlsx")
+                .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                .body(arquivo);
     }
 
 }
